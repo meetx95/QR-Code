@@ -450,49 +450,6 @@ input {
   border-radius: 50%;
 }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-top: 28px;
-}
-
-.feature {
-  display: flex;
-  gap: 14px;
-  padding: 20px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  box-shadow: 0 5px 18px #25294c05;
-}
-
-.feature-icon {
-  width: 40px;
-  height: 40px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  background: #f0f0ff;
-  color: var(--primary);
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.feature h3 {
-  font:
-    750 14px "Manrope",
-    sans-serif;
-  margin: 1px 0 7px;
-}
-
-.feature p {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.65;
-}
-
 .site-footer {
   padding: 26px 15px;
   text-align: center;
@@ -516,14 +473,6 @@ input {
 
   .preview-card {
     min-height: auto;
-  }
-
-  .features {
-    grid-template-columns: 1fr;
-  }
-
-  .feature {
-    padding: 18px;
   }
 
   .preview-area {
@@ -605,15 +554,6 @@ input {
   .qr-image {
     width: 210px;
     height: 210px;
-  }
-
-  .features {
-    gap: 11px;
-    margin-top: 20px;
-  }
-
-  .feature {
-    padding: 16px;
   }
 
   .site-footer {
