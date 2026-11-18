@@ -248,22 +248,18 @@
     </main>
 
     <footer class="site-footer">
-      <p>QR Studio &copy; 2026 · Simple QR code creation</p>
+      <p>&copy; 2026 · QR cod</p>
     </footer>
 
     <script>
       function selectType(type) {
         document.getElementById("type").value = type;
-
         document.getElementById("text-form").style.display =
           type === "text" ? "block" : "none";
-
         document.getElementById("contact-form").style.display =
           type === "contact" ? "block" : "none";
-
         document.getElementById("wifi-form").style.display =
           type === "wifi" ? "block" : "none";
-
         document.querySelectorAll(".type-option").forEach((button) => {
           button.classList.toggle("active", button.dataset.type === type);
         });
