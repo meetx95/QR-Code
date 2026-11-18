@@ -1,53 +1,65 @@
+
 from flask import Flask, render_template, request
 import qrcode
 import io
 import base64
+
 app = Flask(__name__)
+
 @app.route("/", methods=["GET", "POST"])
-
 def home():
-  qr_image = None
-  error = None
-  if request.method == "POST":
-    choice = request.form.get("type")
-    if choice == "text":
-      data = request.form.get("text", "").strip()
+    qr_image = None
+    error = None
 
-    elif choice == "contact":
-      name = request.form.get("name", "").strip()
-      phone = request.form.get("phone", "").strip()
-      data = (
-        f"BEGIN:VCARD\n"
-        f"VERSION:3.0\n"
-        f"FN:{name}\n"
-        f"TEL:{phone}\n"
-        f"END:VCARD"
-      )
+    if request.method == "POST":
+        choice = request.form.get("type")
+        data = ""
 
-    elif choice == "wifi":
-      ssid = request.form.get("ssid", "").strip()
-      password = request.form.get("password", "").strip()
-      data = f"WIFI:T:WPA;S:{ssid};P:{password};;"
+        if choice == "text":
+            data = request.form.get("text", "").strip()
 
-    else:
-      data = ""
+        elif choice == "contact":
+            name = request.form.get("name", "").strip()
+            phone = request.form.get("phone", "").strip()
 
-    if data:
-      img = qrcode.make(data)
-      buffer = io.BytesIO()
-      img.save(buffer, format="PNG")
-      qr_image = base64.b64encode(
-        buffer.getvalue()
-      ).decode("utf-8")
+            if name and phone:
+                data = (
+                    "BEGIN:VCARD\n"
+                    "VERSION:3.0\n"
+                    f"FN:{name}\n"
+                    f"TEL:{phone}\n"
+                    "END:VCARD"
+                )
+            else:
+                error = "Enter both name and phone number."
 
-    else:
-      error = "Please enter the required information."
+        elif choice == "wifi":
+            ssid = request.form.get("ssid", "").strip()
+            password = request.form.get("password", "").strip()
+
+            if ssid:
+                data = f"WIFI:T:WPA;S:{ssid};P:{password};;"
+            else:
+                error = "Enter your WiFi network name."
+
+        if data and not error:
+            img = qrcode.make(data)
+
+            buffer = io.BytesIO()
+            img.save(buffer, format="PNG")
+
+            qr_image = base64.b64encode(
+                buffer.getvalue()
+            ).decode("utf-8")
+
+        elif not data and not error:
+            error = "Please enter the required information."
 
     return render_template(
-      "index.html",
-      qr_image=qr_image,
-      error=error
+        "index.html",
+        qr_image=qr_image,
+        error=error
     )
 
 if __name__ == "__main__":
-  app.run(debug=True)
+    app.run(debug=True)

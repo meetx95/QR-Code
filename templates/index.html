@@ -1,15 +1,251 @@
-{% if error %}
-<p class="error">{{ error }}</p>
-{% endif %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% if qr_image %}
-<div class="result">
-  <h2>Your QR Code</h2>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <img src="data:image/png;base64,{{ qr_image }}" alt="Generated QR Code" class="qr-image">
+  <title>QR Studio | QR Code Generator</title>
 
-  <a href="data:image/png;base64,{{ qr_image }}" download="QRCode.png">
-    Download QR Code
-  </a>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-icon">QR</div>
+      <span>QR Studio</span>
+    </div>
+
+    <div class="nav-label">FREE QR GENERATOR</div>
+  </nav>
+
+  <main class="main-content">
+
+    <section class="intro">
+      <span class="eyebrow">SIMPLE. FAST. FREE.</span>
+      <h1>Create your <span>QR Code</span></h1>
+      <p>
+        Generate QR codes for links, text, contact information
+        or Wi-Fi. Create and download in seconds.
+      </p>
+    </section>
+
+    <section class="workspace">
+
+      <div class="generator-card">
+
+        <div class="card-heading">
+          <h2>Create QR Code</h2>
+          <p>Select what you want to turn into a QR code.</p>
+        </div>
+
+        <form method="POST" id="qr-form">
+
+          <label class="section-label">QR CODE TYPE</label>
+
+          <div class="type-selector">
+            <button type="button" class="type-option active" data-type="text" onclick="selectType('text')">
+              <span class="type-icon">↗</span>
+              <span>Link / Text</span>
+            </button>
+
+            <button type="button" class="type-option" data-type="contact" onclick="selectType('contact')">
+              <span class="type-icon">♙</span>
+              <span>Contact</span>
+            </button>
+
+            <button type="button" class="type-option" data-type="wifi" onclick="selectType('wifi')">
+              <span class="type-icon">⌁</span>
+              <span>Wi-Fi</span>
+            </button>
+          </div>
+
+          <input type="hidden" name="type" id="type" value="text">
+
+          <!-- TEXT -->
+          <div id="text-form" class="fields">
+            <label for="text">Text or website URL</label>
+
+            <input type="text" id="text" name="text" placeholder="https://example.com"
+              value="{{ request.form.get('text', '') }}">
+
+            <p class="field-help">
+              Enter a website link or any text you want to share.
+            </p>
+          </div>
+
+          <!-- CONTACT -->
+          <div id="contact-form" class="fields" style="display:none">
+
+            <label for="name">Full name</label>
+            <input type="text" id="name" name="name" placeholder="John Doe" value="{{ request.form.get('name', '') }}">
+
+            <label for="phone">Phone number</label>
+            <input type="tel" id="phone" name="phone" placeholder="+91 00000 00000"
+              value="{{ request.form.get('phone', '') }}">
+
+            <p class="field-help">
+              Create a QR code containing contact details.
+            </p>
+          </div>
+
+          <!-- WIFI -->
+          <div id="wifi-form" class="fields" style="display:none">
+
+            <label for="ssid">Wi-Fi network name</label>
+            <input type="text" id="ssid" name="ssid" placeholder="Enter network name"
+              value="{{ request.form.get('ssid', '') }}">
+
+            <label for="password">Wi-Fi password</label>
+            <input type="password" id="password" name="password" placeholder="Enter network password"
+              value="{{ request.form.get('password', '') }}">
+
+            <p class="field-help">
+              Anyone scanning the QR code may be able to connect
+              to this network.
+            </p>
+          </div>
+
+          <button type="submit" class="generate-btn">
+            <span>Generate QR Code</span>
+            <span class="btn-arrow">→</span>
+          </button>
+
+        </form>
+
+        {% if error %}
+        <div class="error-message">
+          <span>!</span>
+          {{ error }}
+        </div>
+        {% endif %}
+        
+        </div>
+        
+        <!-- RESULT -->
+        <aside class="preview-card">
+        
+          <div class="preview-heading">
+            <h2>QR Preview</h2>
+            <span class="preview-status">
+              {% if qr_image %}
+              READY
+              {% else %}
+              PREVIEW
+              {% endif %}
+          </span>
+          </div>
+          
+          <div class="preview-area">
+
+          {% if qr_image %}
+
+          <div class="qr-frame">
+            <img src="data:image/png;base64,{{ qr_image }}" alt="Generated QR Code" class="qr-image">
+          </div>
+          
+          <h3>Your QR code is ready</h3>
+          <p>Scan it with your camera to test.</p>
+
+          <a href="data:image/png;base64,{{ qr_image }}" download="QRCode.png" class="download-btn">
+            <span>↓</span> Download PNG
+          </a>
+{% else %}
+
+<div class="empty-preview">
+  <div class="placeholder-qr">
+    <div class="qr-grid">
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+      <div class="qr-block"></div>
+    </div>
+  </div>
+
+  <h3>Your QR code will appear here</h3>
+  <p>
+    Fill in the information and click Generate
+    QR Code.
+  </p>
+          </div>
+
+          {% endif %}
 </div>
-{% endif %}
+
+<div class="preview-footer">
+  <span class="footer-dot"></span>
+  <span>QR images are generated with Python.</span>
+</div>
+
+</aside>
+
+</section>
+
+<section class="features">
+
+  <div class="feature">
+    <div class="feature-icon">01</div>
+    <div>
+      <h3>Easy to use</h3>
+      <p>Simple process with no complicated settings.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-icon">02</div>
+    <div>
+      <h3>Instant generation</h3>
+      <p>Generate your QR code in a few seconds.</p>
+    </div>
+  </div>
+
+  <div class="feature">
+    <div class="feature-icon">03</div>
+    <div>
+      <h3>Download anytime</h3>
+      <p>Save your QR code as a PNG image.</p>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <p>QR Studio &copy; 2026 · Simple QR code creation</p>
+</footer>
+
+<script>
+  function selectType(type) {
+    document.getElementById("type").value = type;
+
+    document.getElementById("text-form").style.display =
+      type === "text" ? "block" : "none";
+
+    document.getElementById("contact-form").style.display =
+      type === "contact" ? "block" : "none";
+
+    document.getElementById("wifi-form").style.display =
+      type === "wifi" ? "block" : "none";
+
+    document.querySelectorAll(".type-option").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.type === type
+      );
+    });
+  }
+
+  selectType("{{ request.form.get('type', 'text') }}");
+</script>
+
+</body>
+
+</html>
