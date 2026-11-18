@@ -1,14 +1,12 @@
 {% if error %}
 <p class="error">{{ error }}</p>
-{% endif %} {% if qr_image %}
+{% endif %}
+
+{% if qr_image %}
 <div class="result">
   <h2>Your QR Code</h2>
 
-  <img
-    src="data:image/png;base64,{{ qr_image }}"
-    alt="Generated QR Code"
-    class="qr-image"
-  />
+  <img src="data:image/png;base64,{{ qr_image }}" alt="Generated QR Code" class="qr-image">
 
   <a href="data:image/png;base64,{{ qr_image }}" download="QRCode.png">
     Download QR Code
