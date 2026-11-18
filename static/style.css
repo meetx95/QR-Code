@@ -63,7 +63,10 @@ input {
   box-shadow: 0 8px 20px #5b5bd633;
   font-size: 14px;
 }
-
+.sec {
+  /* font-size: 14px; */
+  background-color: var(--muted);
+}
 .nav-label {
   color: #7c8096;
   font-size: 11px;
@@ -451,8 +454,8 @@ input {
 }
 
 .site-footer {
-  position: relative;
-  top: 0;
+  /* position: relative; */
+  /* top: 0; */
   width: 100%;
   padding: 26px 15px;
   text-align: center;
