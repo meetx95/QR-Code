@@ -451,6 +451,9 @@ input {
 }
 
 .site-footer {
+  position: relative;
+  top: 0;
+  width: 100%;
   padding: 26px 15px;
   text-align: center;
   border-top: 1px solid var(--line);
